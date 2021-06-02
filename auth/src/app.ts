@@ -16,9 +16,10 @@ app.use(express.json());
 app.use(
   cookieSession({
     signed: false,
-    secure: process.env.NODE_ENV !== "test"
+    secure: process.env.NODE_ENV === "production",
   })
 );
+// console.log(process.env.NODE_ENV);
 // app.get("/api/users/currentuser", (req, res) => {
 //   res.send("Hello new");
 // });
