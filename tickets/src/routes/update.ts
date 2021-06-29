@@ -15,7 +15,9 @@ router.put(
   requireAuth,
   [
     body("title").not().isEmpty().withMessage("Title field cannot be empty"),
-    body("price").isFloat({ gt: 0 }).withMessage("Price must be greate that 0"),
+    body("price")
+      .isFloat({ gt: 0 })
+      .withMessage("Price must be greater that 0"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
