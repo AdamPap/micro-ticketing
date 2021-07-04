@@ -4,7 +4,9 @@ import {
   requireAuth,
 } from "@adamptickets/common";
 import express, { Request, Response } from "express";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
 import { Order, OrderStatus } from "../models/order";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -12,7 +14,7 @@ router.delete(
   "/api/orders/:orderId",
   requireAuth,
   async (req: Request, res: Response) => {
-    const order = await Order.findById(req.params.orderId);
+    const order = await Order.findById(req.params.orderId).populate("ticket");
 
     if (!order) {
       throw new NotFoundError();
@@ -25,7 +27,14 @@ router.delete(
     order.status = OrderStatus.Cancelled;
     await order.save();
 
-    res.status(204).send({});
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
+
+    res.status(204).send(order);
   }
 );
 
