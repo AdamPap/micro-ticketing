@@ -21,7 +21,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     }
 
     ticket.set({ orderId: data.id });
-    ticket.save();
+    await ticket.save();
 
     // await so that we dont ack if an error occurs
     await new TicketUpdatedPublisher(this.client).publish({
