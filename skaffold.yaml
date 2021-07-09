@@ -40,7 +40,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: YOUR_USERNAME/expiration
+    - image: adampap/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
