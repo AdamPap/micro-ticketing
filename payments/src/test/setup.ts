@@ -42,6 +42,7 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
+// @ts-ignore
 global.signin = () => {
   // Build jwt payload {id, email}
   const payload = {
