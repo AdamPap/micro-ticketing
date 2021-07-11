@@ -14,6 +14,11 @@ declare global {
 
 jest.mock("../nats-wrapper");
 
+// set the env variable directly because we don't ahve access
+// to the k8s cluster secret we set (during testing)
+process.env.STRIPE_KEY =
+  "sk_test_51JC1UPKxynnrJ1iqaBBxnnNbeDjA4w7zKzgV7w1iVLWSB72UJChAnK2FCfPiQxSJrVxc7H2tfrJBavksnpZjcMlD00gLAGfGkJ";
+
 let mongo: any;
 
 beforeAll(async () => {
