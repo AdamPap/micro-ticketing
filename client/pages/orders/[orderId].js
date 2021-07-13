@@ -1,20 +1,31 @@
-// import useRequest from "../../hooks/use-request";
+import { useState, useEffect } from "react";
 
 const OrderShow = ({ order }) => {
-  // const { doRequest, errors} = useRequest({
-  //   url: '/api/orders',
-  //   method: 'get',
-  //   body: {
-  //     orderId: order.id
-  //   },
-  //   onSuccess:(order => console.log(order))
-  // })
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  useEffect(() => {
+    const findTimeLeft = () => {
+      const msLeft = new Date(order.expiresAt) - new Date();
+      setTimeLeft(Math.round(msLeft / 1000));
+    };
+
+    findTimeLeft();
+    const timerId = setInterval(findTimeLeft, 1000);
+
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [order]);
+
+  if (timeLeft < 0) {
+    return <div className="text-danger">Order Expired</div>;
+  }
 
   return (
     <div>
-      <h1>Order expires at: {order.expiresAt}</h1>
-      <h2>Order status: {order.status}</h2>
       <h2>Ticket: {order.ticket.title}</h2>
+      <h4>Order expires in: {timeLeft} seconds</h4>
+      <h6>Order status: {order.status}</h6>
     </div>
   );
 };
